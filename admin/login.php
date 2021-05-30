@@ -1,3 +1,26 @@
+<?php
+	if(!defined('SECURITY')){
+		die('Bạn không có quyền truy cập file này !!!');
+	}
+	if(isset($_POST['sbm'])){
+		$mail = $_POST['mail'];
+		$pass = $_POST['pass'];
+
+		$sql = "SELECT * FROM user WHERE user_mail='$mail' AND user_pass='$pass'";
+		$query = mysqli_query($conn, $sql);
+		$row = mysqli_num_rows($query);
+
+		if($row > 0){
+			$_SESSION['mail'] = $mail;
+			$_SESSION['pass'] = $pass;
+
+			header('Location: index.php');
+		}else{
+			$err = '<div class="alert alert-danger">Tài khoản không hợp lệ !</div>';
+		}
+	}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,21 +47,25 @@
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">Vietpro Mobile Shop - Administrator</div>
 				<div class="panel-body">
-					<div class="alert alert-danger">Tài khoản không hợp lệ !</div>
+					<?php
+						if(isset($err)){
+							echo $err;
+						}
+					?>
 					<form role="form" method="post">
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="mail" type="email" autofocus>
+								<input require class="form-control" placeholder="E-mail" name="mail" type="email" autofocus>
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="Mật khẩu" name="pass" type="password" value="">
+								<input require class="form-control" placeholder="Mật khẩu" name="pass" type="password" value="">
 							</div>
 							<div class="checkbox">
 								<label>
 									<input name="remember" type="checkbox" value="Remember Me">Nhớ tài khoản
 								</label>
 							</div>
-							<button type="submit" class="btn btn-primary">Đăng nhập</button>
+							<button name="sbm" type="submit" class="btn btn-primary">Đăng nhập</button>
 						</fieldset>
 					</form>
 				</div>
