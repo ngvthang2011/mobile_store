@@ -2,6 +2,43 @@
 	if(!defined('SECURITY')){
 		die('Bạn không có quyền truy cập file này !!!');
 	}
+
+	$limit = 5;
+	if(isset($_GET['page'])){
+		$page = $_GET['page'];
+	}else{
+		$page=1;
+	}
+	$skip = $page*$limit - $limit;
+	$sql="SELECT * FROM category ORDER BY cat_id DESC LIMIT $skip,$limit";
+	$query = mysqli_query($conn, $sql);
+
+	$total_cat = mysqli_num_rows(mysqli_query($conn,"SELECT * FROM category"));
+	$total_page = ceil($total_cat/$limit);
+	$list_page = '';
+
+	if($page>1){
+		$page_pre = $page-1;
+		$list_page .= '<li class="page-item"><a class="page-link" href="index.php?page_layout=category&page='.$page_pre.'">&laquo;</a></li>';
+	}else{
+		$list_page .= '<li class="page-item disabled"><a class="page-link">&laquo;</a></li>';
+	}
+
+	for($i=1; $i<=$total_page; $i++){
+		if($page == $i ){
+			$list_page .= '<li class="page-item active"><a class="page-link" href="index.php?page_layout=category&page='.$i.'">'.$i.'</a></li>';
+		}else{
+			$list_page .= '<li class="page-item"><a class="page-link" href="index.php?page_layout=category&page='.$i.'">'.$i.'</a></li>';
+		}
+	}
+
+	if($page>=$total_page){
+		$list_page .= '<li class="page-item disabled"><a class="page-link">&raquo;</a></li>';
+	}else{
+		$page_next = $page+1;
+		$list_page .= '<li class="page-item"><a class="page-link" href="index.php?page_layout=category&page='.$page_next.'">&raquo;</a></li>';
+	}
+
 ?>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 	<div class="row">
@@ -21,7 +58,7 @@
 	</div>
 	<!--/.row-->
 	<div id="toolbar" class="btn-group">
-		<a href="category-add.html" class="btn btn-success">
+		<a href="index.php?page_layout=add_category" class="btn btn-success">
 			<i class="glyphicon glyphicon-plus"></i> Thêm danh mục
 		</a>
 	</div>
@@ -39,33 +76,23 @@
 							</tr>
 						</thead>
 						<tbody>
+							<?php while($cat = mysqli_fetch_array($query)){ ?>
 							<tr>
-								<td style="">1</td>
-								<td style="">Danh mục 1</td>
+								<td style=""><?php echo $cat['cat_id']; ?></td>
+								<td style=""><?php echo $cat['cat_name']; ?></td>
 								<td class="form-group">
-									<a href="/" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-									<a href="/" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+									<a href="index.php?page_layout=edit_category&cat_id=<?php echo $cat['cat_id']; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a onclick="return delCat('<?php echo $cat['cat_name']; ?>')" href="del_category.php?cat_id=<?php echo $cat['cat_id']; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
 								</td>
 							</tr>
-							<tr>
-								<td style="">2</td>
-								<td style="">Danh mục 2</td>
-								<td class="form-group">
-									<a href="/" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-									<a href="/" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
-								</td>
-							</tr>
+							<?php } ?>
 						</tbody>
 					</table>
 				</div>
 				<div class="panel-footer">
 					<nav aria-label="Page navigation example">
 						<ul class="pagination">
-							<li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-							<li class="page-item"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+							<?php echo $list_page; ?>
 						</ul>
 					</nav>
 				</div>
@@ -78,3 +105,8 @@
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-table.js"></script>
+<script>
+	function delCat(catName){
+		return confirm('Bạn có chắc chắn muốn xóa danh mục '+catName+' ?');
+	}
+</script>
