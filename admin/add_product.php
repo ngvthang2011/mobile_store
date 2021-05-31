@@ -2,6 +2,39 @@
 	if(!defined('SECURITY')){
 		die('Bạn không có quyền truy cập file này !!!');
 	}
+
+	$sql_cat = "SELECT * FROM category ORDER BY cat_id ASC";
+	$query_cat = mysqli_query($conn, $sql_cat);
+
+	if(isset($_POST['sbm'])){
+		$cat_id = $_POST['cat_id'];
+		$prd_name = $_POST['prd_name'];
+
+		$prd_image = $_FILES['prd_image']['name'];
+		$prd_image_tmp_name = $_FILES['prd_image']['tmp_name'];
+
+		$prd_price = $_POST['prd_price'];
+		$prd_warranty = $_POST['prd_warranty'];
+		$prd_accessories = $_POST['prd_accessories'];
+		$prd_new = $_POST['prd_new'];
+		$prd_promotion = $_POST['prd_promotion'];
+		$prd_status = $_POST['prd_status'];
+		
+		if(isset($_POST['prd_featured'])){
+			$prd_featured = $_POST['prd_featured'];
+		}else{
+			$prd_featured = 0;
+		}
+
+		$prd_details = $_POST['prd_details'];
+
+		$sql = "INSERT INTO product(cat_id, prd_name, prd_image, prd_price, prd_warranty, prd_accessories, prd_new, prd_promotion, prd_status, prd_featured, prd_details)
+							VALUES($cat_id, '$prd_name', '$prd_image', $prd_price, '$prd_warranty', '$prd_accessories', '$prd_new', '$prd_promotion', $prd_status, $prd_featured, '$prd_details')";
+		$query = mysqli_query($conn, $sql);
+
+		move_uploaded_file($prd_image_tmp_name, 'img/'.$prd_image);
+		header('location: index.php?page_layout=product');
+	}
 ?>
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 	    <div class="row">
@@ -67,10 +100,11 @@
 	                        <div class="form-group">
 	                            <label>Danh mục</label>
 	                            <select name="cat_id" class="form-control">
-	                                <option value=1>iPhone</option>
-	                                <option value=2>Samsung</option>
-	                                <option value=3>Nokia</option>
-	                                <option value=4>LG</option>
+									<?php
+										while($cat = mysqli_fetch_array($query_cat)){
+									?>
+	                                <option value=<?php echo $cat['cat_id'] ?>><?php echo $cat['cat_name'] ?></option>
+	                                <?php } ?>
 	                            </select>
 	                        </div>
 
@@ -103,3 +137,10 @@
 	        </div><!-- /.col-->
 	    </div><!-- /.row -->
         </div><!--/.main-->
+	<script>
+        ClassicEditor
+            .create( document.querySelector( 'textarea[name="prd_details"]' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>

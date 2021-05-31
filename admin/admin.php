@@ -18,6 +18,8 @@
 
 	<!--Icons-->
 	<script src="js/lumino.glyphs.js"></script>
+	<!-- CKediter -->
+	<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script> 
 
 	<!--[if lt IE 9]>
 <script src="js/html5shiv.js"></script>
@@ -37,7 +39,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>Vietpro</span>Shop</a>
+				<a class="navbar-brand" href="index.php"><span>Vietpro</span>Shop</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user">
@@ -65,14 +67,14 @@
 			</div>
 		</form>
 		<ul class="nav menu">
-			<li class="active"><a href="admin.html"><svg class="glyph stroked dashboard-dial">
+			<li <?php if(!isset($_GET['page_layout'])){echo 'class="active"';} ?>><a href="index.php"><svg class="glyph stroked dashboard-dial">
 						<use xlink:href="#stroked-dashboard-dial"></use>
 					</svg> Dashboard</a></li>
-			<li><a href="user.html"><svg class="glyph stroked male user ">
+			<li <?php if(isset($_GET['page_layout'])){if($_GET['page_layout']=='user' || $_GET['page_layout']=='add_user' || $_GET['page_layout']=='edit_user'){echo 'class="active"';}} ?>><a href="index.php?page_layout=user"><svg class="glyph stroked male user ">
 						<use xlink:href="#stroked-male-user" /></svg>Quản lý thành viên</a></li>
-			<li><a href="category.html"><svg class="glyph stroked open folder">
+			<li <?php if(isset($_GET['page_layout'])){if($_GET['page_layout']=='category' || $_GET['page_layout']=='add_category' || $_GET['page_layout']=='edit_category'){echo 'class="active"';}} ?>><a href="index.php?page_layout=category"><svg class="glyph stroked open folder">
 						<use xlink:href="#stroked-open-folder" /></svg>Quản lý danh mục</a></li>
-			<li><a href="product.html"><svg class="glyph stroked bag">
+			<li <?php if(isset($_GET['page_layout'])){if($_GET['page_layout']=='product' || $_GET['page_layout']=='add_product' || $_GET['page_layout']=='edit_product'){echo 'class="active"';}} ?>><a href="index.php?page_layout=product"><svg class="glyph stroked bag">
 						<use xlink:href="#stroked-bag"></use>
 					</svg>Quản lý sản phẩm</a></li>
 			<li><a href="comment.html"><svg class="glyph stroked two messages">
