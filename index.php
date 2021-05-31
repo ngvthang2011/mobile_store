@@ -1,4 +1,5 @@
 <?php
+    session_start();
     define('SECURITY', true);
     include_once('./config/connect.php');
 ?>
@@ -6,7 +7,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Home</title>
+<title>Mobile-Shop</title>
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/cart.css">

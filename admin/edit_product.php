@@ -126,7 +126,7 @@
                             <label>Trạng thái</label>
                             <select name="prd_status" class="form-control">
                                 <option <?php if($product['prd_status']==1){echo 'selected';}?> value=1>Còn hàng</option>
-                                <option <?php if($product['prd_status']==0){echo 'selected';}?> value=2>Hết hàng</option>
+                                <option <?php if($product['prd_status']==0){echo 'selected';}?> value=0>Hết hàng</option>
                             </select>
                         </div>
 

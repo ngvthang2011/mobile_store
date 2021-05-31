@@ -1,26 +1,37 @@
+<?php
+    if(isset($_GET['prd_id'])){
+        $prd_id = $_GET['prd_id'];
+
+        $sql="SELECT * FROM product WHERE prd_id=$prd_id";
+        $prd=mysqli_fetch_array(mysqli_query($conn,$sql));
+
+    }else{
+        die('404 . NOT FOUND.');
+    }
+?>
 <!--	List Product	-->
 <div id="product">
     <div id="product-head" class="row">
         <div id="product-img" class="col-lg-6 col-md-6 col-sm-12">
-            <img src="images/product-1.png">
+            <img src="admin/img/<?php echo $prd['prd_image']; ?>">
         </div>
         <div id="product-details" class="col-lg-6 col-md-6 col-sm-12">
-            <h1>iPhone X - 64GB Silver</h1>
+            <h1><?php echo $prd['prd_name']; ?></h1>
             <ul>
-                <li><span>Bảo hành:</span> 12 Tháng</li>
-                <li><span>Đi kèm:</span> Hộp, sách, sạc, cáp, tai nghe</li>
-                <li><span>Tình trạng:</span> Máy Mới 100%</li>
-                <li><span>Khuyến Mại:</span> Dán Màn Hình 3 lớp</li>
+                <li><span>Bảo hành:</span> <?php echo $prd['prd_warranty']; ?></li>
+                <li><span>Đi kèm:</span> <?php echo $prd['prd_accessories']; ?></li>
+                <li><span>Tình trạng:</span> <?php echo $prd['prd_new']; ?></li>
+                <li><span>Khuyến Mại:</span> <?php echo $prd['prd_promotion']; ?></li>
                 <li id="price">Giá Bán (chưa bao gồm VAT)</li>
-                <li id="price-number">22.990.000đ</li>
-                <li id="status">Còn hàng</li>
+                <li id="price-number"><?php echo number_format($prd['prd_price'],0,'','.'); ?>đ</li>
+                <li id="status"><?php if($prd['prd_status']==1){echo 'Còn Hàng';}else{echo 'Hết hàng';} ?></li>
             </ul>
-            <div id="add-cart"><a href="#">Mua ngay</a></div>
+            <div id="add-cart"><a href="modules/cart/add_cart.php?prd_id=<?php echo $prd['prd_id']; ?>">Mua ngay</a></div>
         </div>
     </div>
     <div id="product-body" class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <h3>Đánh giá về iPhone X 64GB</h3>
+            <h3>Đánh giá về <?php echo $prd['prd_name']; ?> </h3>
             <p>
                 Màn hình OLED có hỗ trợ HDR là một sự nâng cấp mới của Apple thay vì màn hình LCD với IPS được tìm thấy
                 trên iPhone 8 và iPhone 8 Plus đem đến tỉ lệ tương phản cao hơn đáng kể là 1.000.000: 1, so với 1.300: 1
@@ -54,6 +65,19 @@
     </div>
 
     <!--	Comment	-->
+    <?php 
+        if(isset($_POST['sbm'])){
+            date_default_timezone_set('Asia/Ho_Chi_Minh');
+            $comm_name = $_POST['comm_name'];
+            $comm_mail = $_POST['comm_mail'];
+            $comm_details = $_POST['comm_details'];
+            $comm_date = date('Y-m-d H:i:s');
+
+            $sql= "INSERT INTO comment(prd_id, comm_name, comm_mail, comm_date, comm_details)
+                    VALUES($prd_id, '$comm_name', '$comm_mail', '$comm_date', '$comm_details')";
+            $query = mysqli_query($conn, $sql);
+        }
+    ?>
     <div id="comment" class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <h3>Bình luận sản phẩm</h3>
@@ -77,63 +101,24 @@
     <!--	End Comment	-->
 
     <!--	Comments List	-->
+    <?php 
+        $sql = "SELECT * FROM comment WHERE prd_id=$prd_id ORDER BY comm_id DESC";
+        $query = mysqli_query($conn, $sql);
+        
+    ?>
     <div id="comments-list" class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
+            <?php while($comm=mysqli_fetch_array($query)){ ?>
             <div class="comment-item">
                 <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
+                    <li><b><?php echo $comm['comm_name']; ?></b></li>
+                    <li><?php echo $comm['comm_date']; ?></li>
                     <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét,
-                            chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người
-                            có thể cân nhắc.</p>
+                        <p><?php echo $comm['comm_details']; ?></p>
                     </li>
                 </ul>
             </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét,
-                            chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người
-                            có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét,
-                            chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người
-                            có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét,
-                            chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người
-                            có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp ảnh tương đối nét,
-                            chơi game rất phê. Nếu giá mềm một chút thì sẽ bán khá chạy. Một sản phẩm tốt mà mọi người
-                            có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
+           <?php } ?>
         </div>
     </div>
     <!--	End Comments List	-->

@@ -1,56 +1,29 @@
+<?php
+    if(isset($_POST['key'])){
+        $keyword = $_POST['key'];
+
+        $arr_keyword = explode(' ', $keyword);
+        $key= '%'.implode('%', $arr_keyword).'%';
+        $sql = "SELECT * FROM product WHERE prd_name LIKE '$key'";
+        $query= mysqli_query($conn, $sql);
+    }else{
+        die('404 NOT FOUND');
+    }
+?>
+
 <!--	List Product	-->
 <div class="products">
-    <div id="search-result">Kết quả tìm kiếm với sản phẩm <span>iPhone Xs Max 2 Sim - 256GB</span></div>
-    <div class="product-list card-deck">
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-1.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-2.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-3.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-    </div>
-    <div class="product-list card-deck">
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-4.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-5.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-6.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-    </div>
-    <div class="product-list card-deck">
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-7.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-8.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-9.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
+    <div id="search-result">Kết quả tìm kiếm với sản phẩm:  <span><?php echo $keyword; ?></span></div>
+    <div class="row">
+        <?php while($prd=mysqli_fetch_array($query)){ ?>
+            <div class="col-lg-4 col-md-4 col-sm6 product">
+                <div class="product-item card text-center">
+                    <a href="index.php?page_layout=product&prd_id=<?php echo $prd['prd_id']; ?>"><img src="./admin/img/<?php echo $prd['prd_image']; ?>"></a>
+                    <h4><a href="index.php?page_layout=product&prd_id=<?php echo $prd['prd_id']; ?>"><?php echo $prd['prd_name']; ?></a></h4>
+                    <p>Giá Bán: <span><?php echo number_format($prd['prd_price'],0,'','.'); ?>đ</span></p>
+                </div>
+            </div>
+        <?php } ?>
     </div>
 </div>
 <!--	End List Product	-->
@@ -65,4 +38,3 @@
     </ul>
 </div>
 
-</div>
