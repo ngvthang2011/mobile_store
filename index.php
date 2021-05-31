@@ -1,3 +1,7 @@
+<?php
+    define('SECURITY', true);
+    include_once('./config/connect.php');
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,18 +42,7 @@
 	<div class="container">
     	<div class="row">
         	<div class="col-lg-12 col-md-12 col-sm-12">
-            	<nav>
-                	<div id="menu" class="collapse navbar-collapse">
-                        <ul>
-                            <li class="menu-item"><a href="#">iPhone</a></li>
-                            <li class="menu-item"><a href="#">Samsung</a></li>
-                            <li class="menu-item"><a href="#">HTC</a></li>
-                            <li class="menu-item"><a href="#">Nokia</a></li>
-                            <li class="menu-item"><a href="#">Sony</a></li>
-                            <li class="menu-item"><a href="#">Blackberry</a></li>
-                        </ul>
-                    </div>
-                </nav>
+            	<?php include_once('./modules/category/menu.php'); ?>
             </div>
         </div>
         <div class="row">
@@ -60,9 +53,9 @@
                 <?php 
                     if(isset($_GET['page_layout'])){
                         switch($_GET['page_layout']){
-                            case 'category': include_once('category.php');
+                            case 'category': include_once('./modules/category/category.php');
                             break;
-                            case 'product': include_once('product.php');
+                            case 'product': include_once('./modules/products/product.php');
                             break;
                             case 'search': include_once('modules/search/search.php');
                             break;

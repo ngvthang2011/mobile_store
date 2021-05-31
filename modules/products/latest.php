@@ -1,39 +1,20 @@
+<?php
+     $sql="SELECT * FROM product ORDER BY prd_id DESC LIMIT 6";
+     $query = mysqli_query($conn, $sql);
+?>
 <!--	Latest Product	-->
 <div class="products">
     <h3>Sản phẩm mới</h3>
-    <div class="product-list card-deck">
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-7.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
+    <div class="row">
+        <?php while($prd=mysqli_fetch_array($query)){ ?>
+        <div class="col-lg-4 col-md-4 col-sm6 product">
+            <div class="product-item card text-center">
+                <a href="index.php?page_layout=product&prd_id=<?php echo $prd['prd_id']; ?>"><img src="./admin/img/<?php echo $prd['prd_image']; ?>"></a>
+                <h4><a href="index.php?page_layout=product&prd_id=<?php echo $prd['prd_id']; ?>"><?php echo $prd['prd_name']; ?></a></h4>
+                <p>Giá Bán: <span><?php echo number_format($prd['prd_price'],0,'','.'); ?>đ</span></p>
+            </div>
         </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-8.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-9.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-    </div>
-    <div class="product-list card-deck">
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-10.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-11.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
-        <div class="product-item card text-center">
-            <a href="#"><img src="images/product-12.png"></a>
-            <h4><a href="#">iPhone Xs Max 2 Sim - 256GB</a></h4>
-            <p>Giá Bán: <span>32.990.000đ</span></p>
-        </div>
+        <?php } ?>
     </div>
 </div>
 <!--	End Latest Product	-->
